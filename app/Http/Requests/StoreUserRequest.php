@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\DTO\UserDTO;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreUserRequest extends FormRequest
@@ -26,7 +27,18 @@ class StoreUserRequest extends FormRequest
         return [
             'name'          => 'string|required|max:40',
             'email'         => 'email|required|unique:users',
-            'password'      => 'string|required|confirmed'
+            'password'      => 'string|required|min:8'
         ];
+    }
+
+    public function toDTO(): UserDTO
+    {
+        return new UserDTO(
+            [
+                'name'  => $this->name,
+                'email' => $this->email,
+                'password'  => $this->password
+            ]
+        );
     }
 }
